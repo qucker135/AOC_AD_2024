@@ -13,8 +13,14 @@ zipTuple (list1, list2) = zip list1 list2
 absDiff :: Num a => Ord a => (a, a) -> a
 absDiff (x, y) = abs (x - y)
 
+nrOfOccs :: Integer -> [Integer] -> Integer
+nrOfOccs x = toInteger . length . filter (== x)
+
+sumOfnrOfOccsInTuple :: ([Integer], [Integer]) -> Integer
+sumOfnrOfOccsInTuple (list1, list2) = sum $ map (\x -> (x * (nrOfOccs x list2))) list1
+
 main :: IO ()
 main = do
     contents <- readFile "input.txt"
-    print $ sum $ map absDiff $ zipTuple $ sortTupleOfLists $ unzip $ map (firstTwoEls . (map (read :: String -> Integer)) . words) $ lines contents
+    print $ sumOfnrOfOccsInTuple $ unzip $ map (firstTwoEls . (map (read :: String -> Integer)) . words) $ lines contents
     
